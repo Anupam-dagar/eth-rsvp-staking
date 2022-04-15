@@ -33,7 +33,8 @@ contract Event is AccessControl, Ownable {
         string memory eventTitle,
         string memory eventDescription,
         uint256 availableTickets,
-        uint256 price
+        uint256 price,
+        address owner
     ) {
         title = eventTitle;
         description = eventDescription;
@@ -43,6 +44,7 @@ contract Event is AccessControl, Ownable {
             totalTickets: availableTickets,
             ticketPrice: price
         });
+        transferOwnership(owner);
         _setupRole(MANAGER_ROLE, msg.sender);
     }
 

@@ -24,6 +24,9 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 module.exports = {
   solidity: "0.8.4",
   networks: {
+    localhost: {
+      url: "http://127.0.0.1:8545",
+    },
     ropsten: {
       url: process.env.ROPSTEN_URL || "",
       accounts:
@@ -34,7 +37,7 @@ module.exports = {
     enabled: process.env.REPORT_GAS !== undefined,
     currency: "USD",
   },
-  etherscan: {
-    apiKey: process.env.ETHERSCAN_API_KEY,
-  },
+  // etherscan: {
+  //   apiKey: process.env.ETHERSCAN_API_KEY,
+  // },
 };
