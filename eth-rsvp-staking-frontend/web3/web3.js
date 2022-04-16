@@ -1,3 +1,7 @@
+import { ethers } from "ethers";
+import eventFactory from "../contracts/EventFactory.json";
+import event from "../contracts/Event.json";
+
 const getWalletAccounts = async () => {
   const { ethereum } = window;
   if (!ethereum) {
@@ -25,7 +29,48 @@ const requestAccounts = async () => {
   }
 };
 
+const getEvents = async () => {
+  const contract = getEventFactoryContract();
+  const events = await contract.getEvents();
+  return events;
+};
+
+const createEvent = async (title, description, maxTickets, price) => {
+  const contract = getEventFactoryContract();
+  const transaction = await contract.createEvent(
+    title,
+    description,
+    maxTickets,
+    price
+  );
+  console.log(JSON.stringify(transaction));
+  await transaction.wait();
+};
+
+const getEventFactoryContract = () => {
+  const { ethereum } = window;
+  const provider = new ethers.providers.Web3Provider(ethereum);
+  const signer = provider.getSigner();
+  const contract = new ethers.Contract(
+    process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+    eventFactory.abi,
+    signer
+  );
+  return contract;
+};
+
+const getEventContract = (address) => {
+  const { ethereum } = window;
+  const provider = new ethers.providers.Web3Provider(ethereum);
+  const signer = provider.getSigner();
+  const contract = new ethers.Contract(address, event.abi, signer);
+  return contract;
+};
+
 export default {
   getWalletAccounts,
   requestAccounts,
+  getEvents,
+  createEvent,
+  getEventContract,
 };

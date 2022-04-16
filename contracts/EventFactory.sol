@@ -5,6 +5,7 @@ import "./Event.sol";
 
 contract EventFactory {
     address[] public events;
+    mapping(address => address[]) public ownerEvents;
 
     function createEvent(
         string memory eventTitle,
@@ -20,6 +21,7 @@ contract EventFactory {
             msg.sender
         );
         events.push(address(eventData));
+        ownerEvents[msg.sender].push(address(eventData));
     }
 
     function getEvents() public view returns (address[] memory) {

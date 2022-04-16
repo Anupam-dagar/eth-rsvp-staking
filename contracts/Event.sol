@@ -8,8 +8,6 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract Event is AccessControl, Ownable {
     using Counters for Counters.Counter;
 
-    bytes32 public constant MANAGER_ROLE = keccak256("MANAGER");
-
     struct Ticket {
         Counters.Counter sold;
         uint256 totalTickets;
@@ -20,14 +18,6 @@ contract Event is AccessControl, Ownable {
     mapping(address => bool) public participantRsvp;
     string public title;
     string public description;
-
-    modifier onlyManager(address sender) {
-        require(
-            hasRole(MANAGER_ROLE, msg.sender),
-            "Only manager can add managers."
-        );
-        _;
-    }
 
     constructor(
         string memory eventTitle,
@@ -45,7 +35,6 @@ contract Event is AccessControl, Ownable {
             ticketPrice: price
         });
         transferOwnership(owner);
-        _setupRole(MANAGER_ROLE, msg.sender);
     }
 
     function buyTicket() public payable {
@@ -59,14 +48,7 @@ contract Event is AccessControl, Ownable {
         ticket.sold.increment();
     }
 
-    function addManager(address manager) public onlyManager(msg.sender) {
-        _setupRole(MANAGER_ROLE, manager);
-    }
-
-    function rsvpParticipant(address payable participant)
-        public
-        onlyManager(msg.sender)
-    {
+    function rsvpParticipant(address payable participant) public onlyOwner {
         require(
             participantToEvent[participant] == true,
             "Participant not registered."
