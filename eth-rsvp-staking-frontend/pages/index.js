@@ -1,7 +1,18 @@
-import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
+import { Container } from "semantic-ui-react";
+import Navbar from "../components/Navbar";
+import WelcomeMessage from "../components/WelcomeMessage";
+import CommonLayout from "../layouts/CommonLayout";
 
-export default function Home() {
-  return <div>Hello Next.</div>;
-}
+const Home = () => {
+  return (
+    <>
+      <WelcomeMessage />
+    </>
+  );
+};
+
+Home.getLayout = function getLayout(page) {
+  return <CommonLayout>{page}</CommonLayout>;
+};
+
+export default Home;
