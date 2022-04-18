@@ -27,4 +27,8 @@ contract EventFactory {
     function getEvents() public view returns (address[] memory) {
         return events;
     }
+
+    function getOwnerEvents() public view returns (address[] memory) {
+        return ownerEvents[msg.sender];
+    }
 }

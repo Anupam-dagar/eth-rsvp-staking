@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import eventFactory from "../contracts/EventFactory.json";
 import event from "../contracts/Event.json";
 
@@ -67,10 +67,42 @@ const getEventContract = (address) => {
   return contract;
 };
 
+const buyTicket = async (address, price) => {
+  const contract = getEventContract(address);
+  const transaction = await contract.buyTicket({
+    value: ethers.utils.parseUnits(price, "ether"),
+  });
+  console.log(JSON.stringify(transaction));
+  await transaction.wait();
+};
+
+const rsvpParticipant = async (address, participantAddress) => {
+  const contract = getEventContract(address);
+  const transaction = await contract.rsvpParticipant(participantAddress);
+  console.log(JSON.stringify(transaction));
+  await transaction.wait();
+};
+
+const getEventsByOwner = async () => {
+  const contract = getEventFactoryContract();
+  const events = await contract.getOwnerEvents();
+  return events;
+};
+
+const withdrawBalance = async (address) => {
+  const contract = getEventContract(address);
+  const transaction = await contract.withdrawFunds();
+  await transaction.wait();
+};
+
 export default {
   getWalletAccounts,
   requestAccounts,
   getEvents,
   createEvent,
   getEventContract,
+  buyTicket,
+  rsvpParticipant,
+  getEventsByOwner,
+  withdrawBalance,
 };

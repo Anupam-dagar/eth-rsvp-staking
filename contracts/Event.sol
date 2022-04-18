@@ -16,6 +16,7 @@ contract Event is AccessControl, Ownable {
     Ticket public ticket;
     mapping(address => bool) public participantToEvent;
     mapping(address => bool) public participantRsvp;
+    uint256 public rsvpCount;
     string public title;
     string public description;
 
@@ -54,6 +55,7 @@ contract Event is AccessControl, Ownable {
             "Participant not registered."
         );
         participantRsvp[participant] = true;
+        rsvpCount++;
         uint256 participantStake = ticket.ticketPrice -
             ((ticket.ticketPrice / 100) * 1);
         participant.transfer(participantStake);
@@ -71,6 +73,8 @@ contract Event is AccessControl, Ownable {
             string memory,
             uint256,
             uint256,
+            uint256,
+            bool,
             uint256
         )
     {
@@ -79,7 +83,9 @@ contract Event is AccessControl, Ownable {
             description,
             ticket.sold.current(),
             ticket.totalTickets,
-            ticket.ticketPrice
+            ticket.ticketPrice,
+            participantToEvent[msg.sender],
+            rsvpCount
         );
     }
 }

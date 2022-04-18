@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Container, Menu } from "semantic-ui-react";
 import AuthContext from "../store/AuthContext";
 import web3 from "../web3/web3";
+import Link from "next/link";
 
 const Navbar = () => {
   const [walletConnected, setWalletConnected] = useState(false);
@@ -48,15 +49,17 @@ const Navbar = () => {
       <Container>
         <Menu.Item header>Event Management</Menu.Item>
         <Menu.Menu position="right">
-          <Menu.Item name="allevents">All Events</Menu.Item>
+          <Link href={"/"}>
+            <Menu.Item name="allevents">All Events</Menu.Item>
+          </Link>
 
           {walletConnected ? (
             <>
-              <Menu.Item name="myevents">My Events</Menu.Item>
-
-              <Menu.Item name="management" position="right">
-                Management
-              </Menu.Item>
+              <Link href={"/management"}>
+                <Menu.Item name="management" position="right">
+                  Management
+                </Menu.Item>
+              </Link>
             </>
           ) : (
             <Menu.Item
